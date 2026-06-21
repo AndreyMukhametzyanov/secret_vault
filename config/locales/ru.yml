@@ -1,0 +1,83 @@
+ru:
+  layouts:
+    application:
+      title: "Секретница | Безопасный обмен секретами"
+      brand: "Секретница"
+
+  secrets:
+    new:
+      title: "Создать одноразовую ссылку"
+      lead: "Данные шифруются внутри базы и полностью удаляются после первого просмотра."
+      body_label: "Ваш секрет (пароль, токен, текст)"
+      body_placeholder: "Вставьте сюда конфиденциальные данные..."
+      passphrase_label: "Кодовое слово для защиты"
+      passphrase_placeholder: "Скоро — следующий этап"
+      passphrase_hint: "Пароль на ссылку появится в следующем обновлении; сейчас защита — одноразовость и UUID."
+      submit: "Сгенерировать ссылку"
+
+    show:
+      expired_title: "Ссылка больше недействительна"
+      expired_lead: "Этот секрет уже был прочитан кем-то ранее или у него истек срок жизни (24 часа)."
+      home: "На главную"
+      revealed_title: "Ваш секретный текст"
+      warning_title: "Внимание!"
+      warning_body: "Эта страница открыта в первый и последний раз. Секрет удалён из базы. При обновлении страницы данные не вернутся."
+      create_own: "Создать свою секретную ссылку"
+
+    success:
+      title: "Ссылка успешно создана!"
+      lead: "Скопируйте её и отправьте получателю. Помните: она сработает только 1 раз."
+      copy: "Скопировать"
+      copied: "Скопировано! ✓"
+      another: "Создать еще один секрет"
+
+  activerecord:
+    errors:
+      models:
+        secret:
+          attributes:
+            encrypted_body:
+              blank: "не может быть пустым"
+              too_long: "слишком длинный (максимум %{max_kb} КБ)"
+
+en:
+  layouts:
+    application:
+      title: "Secret Vault | Secure secret sharing"
+      brand: "Secret Vault"
+
+  secrets:
+    new:
+      title: "Create a one-time link"
+      lead: "Data is encrypted in the database and removed after the first view."
+      body_label: "Your secret (password, token, text)"
+      body_placeholder: "Paste confidential data here..."
+      passphrase_label: "Passphrase protection"
+      passphrase_placeholder: "Coming in the next release"
+      passphrase_hint: "Link passphrase is coming soon; for now protection is one-time access and UUID links."
+      submit: "Generate link"
+
+    show:
+      expired_title: "This link is no longer valid"
+      expired_lead: "This secret was already read or expired (24 hours)."
+      home: "Home"
+      revealed_title: "Your secret"
+      warning_title: "Warning!"
+      warning_body: "This page is shown once. The secret was removed from the database. Refreshing will not bring it back."
+      create_own: "Create your own secret link"
+
+    success:
+      title: "Link created!"
+      lead: "Copy it and send to the recipient. It works only once."
+      copy: "Copy"
+      copied: "Copied! ✓"
+      another: "Create another secret"
+
+  activerecord:
+    errors:
+      models:
+        secret:
+          attributes:
+            encrypted_body:
+              blank: "can't be blank"
+              too_long: "is too long (maximum %{max_kb} KB)"
