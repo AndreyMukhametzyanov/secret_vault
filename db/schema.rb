@@ -11,9 +11,10 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.0].define(version: 2026_06_21_202438) do
-  create_table "secrets", id: { type: :string, limit: 36 }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "secrets", id: { type: :string, limit: 36 }, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.text "encrypted_body", null: false
-    t.string "password_salt"
+    t.string "password_digest"
+    t.integer "password_attempts", default: 0, null: false
     t.datetime "expires_at", null: false
     t.integer "max_reads", default: 1
     t.integer "reads_count", default: 0
