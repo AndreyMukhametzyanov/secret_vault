@@ -55,6 +55,10 @@ class Secret < ApplicationRecord
     password_attempts >= MAX_PASSWORD_ATTEMPTS
   end
 
+  def password_attempts_remaining
+    [MAX_PASSWORD_ATTEMPTS - password_attempts, 0].max
+  end
+
   private
 
   def generate_uuid

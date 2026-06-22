@@ -45,9 +45,15 @@ class SecretsController < ApplicationController
       render :show
     else
       @secret.record_failed_passphrase!
-      @requires_password = true
-      @wrong_password = true
-      render :show, status: :unprocessable_entity
+      if @secret.password_locked?
+        @expired = true
+        render :show, status: :unprocessable_entity
+      else
+        @requires_password = true
+        @wrong_password = true
+        @password_attempts_remaining = @secret.password_attempts_remaining
+        render :show, status: :unprocessable_entity
+      end
     end
   rescue ActiveRecord::RecordNotFound
     @expired = true

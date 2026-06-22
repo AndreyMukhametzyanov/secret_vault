@@ -39,6 +39,7 @@ class SecretsControllerTest < ActionDispatch::IntegrationTest
 
     post reveal_secret_path(secret), params: { password_attempt: "wrong" }
     assert_response :unprocessable_entity
+    assert_match I18n.t("secrets.show.wrong_password", remaining: 4), response.body
     assert Secret.exists?(secret.id)
     assert_equal 0, secret.reload.reads_count
 
