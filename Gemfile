@@ -10,6 +10,7 @@ gem "stimulus-rails"
 gem "mysql2", "~> 0.5"
 gem "propshaft"
 gem "slim-rails"
+gem "bcrypt", "~> 3.1.7"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
 

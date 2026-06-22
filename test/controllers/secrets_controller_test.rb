@@ -25,4 +25,26 @@ class SecretsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("secrets.show.expired_title"), response.body
   end
+
+  test "show with wrong passphrase does not burn secret" do
+    secret = Secret.create!(
+      encrypted_body: "hidden",
+      expires_at: 1.hour.from_now,
+      password: "secret"
+    )
+
+    get secret_path(secret)
+    assert_response :success
+    assert_select "input[name=password_attempt]"
+
+    post reveal_secret_path(secret), params: { password_attempt: "wrong" }
+    assert_response :unprocessable_entity
+    assert Secret.exists?(secret.id)
+    assert_equal 0, secret.reload.reads_count
+
+    post reveal_secret_path(secret), params: { password_attempt: "secret" }
+    assert_response :success
+    assert_match "hidden", response.body
+    assert_not Secret.exists?(secret.id)
+  end
 end
