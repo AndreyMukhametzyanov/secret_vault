@@ -4,6 +4,12 @@ class SecretsController < ApplicationController
   end
 
   def create
+    unless Secrets::CreateRateLimit.allowed?(client_ip)
+      @secret = Secret.new
+      flash.now[:alert] = t("secrets.create.rate_limit_exceeded")
+      return render :new, status: :too_many_requests
+    end
+
     @secret = Secret.new(
       encrypted_body: secret_params[:body],
       expires_at: 24.hours.from_now
@@ -11,7 +17,9 @@ class SecretsController < ApplicationController
     @secret.password = secret_params[:passphrase] if secret_params[:passphrase].present?
 
     if @secret.save
-      redirect_to success_secret_path(@secret)
+      creator_token = @secret.assign_creator_token!
+      Secrets::CreateRateLimit.record!(client_ip)
+      redirect_to success_secret_path(@secret, token: creator_token)
     else
       render :new, status: :unprocessable_entity
     end
@@ -19,6 +27,8 @@ class SecretsController < ApplicationController
 
   def success
     @secret = Secret.active.find(params[:id])
+    head :not_found and return unless @secret.valid_creator_token?(params[:token])
+
     @shareable_url = secret_url(@secret)
   rescue ActiveRecord::RecordNotFound
     head :not_found

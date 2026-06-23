@@ -59,6 +59,20 @@ class Secret < ApplicationRecord
     [MAX_PASSWORD_ATTEMPTS - password_attempts, 0].max
   end
 
+  def assign_creator_token!
+    token = SecureRandom.urlsafe_base64(32)
+    update_column(:creator_token_digest, BCrypt::Password.create(token))
+    token
+  end
+
+  def valid_creator_token?(token)
+    return false if token.blank? || creator_token_digest.blank?
+
+    BCrypt::Password.new(creator_token_digest) == token
+  rescue BCrypt::Errors::InvalidHash
+    false
+  end
+
   private
 
   def generate_uuid

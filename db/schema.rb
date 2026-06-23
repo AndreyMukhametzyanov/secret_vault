@@ -18,6 +18,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_21_202438) do
     t.datetime "expires_at", null: false
     t.integer "max_reads", default: 1
     t.integer "reads_count", default: 0
+    t.string "creator_token_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

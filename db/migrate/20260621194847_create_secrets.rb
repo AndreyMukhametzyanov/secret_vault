@@ -8,6 +8,7 @@ class CreateSecrets < ActiveRecord::Migration[8.0]
       t.datetime :expires_at, null: false
       t.integer :max_reads, default: 1
       t.integer :reads_count, default: 0
+      t.string :creator_token_digest
 
       t.timestamps
     end

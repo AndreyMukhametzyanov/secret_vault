@@ -1,2 +1,5 @@
 en:
   hello: "Hello world"
+  secrets:
+    create:
+      rate_limit_exceeded: "Daily link creation limit reached for your IP. Try again tomorrow."

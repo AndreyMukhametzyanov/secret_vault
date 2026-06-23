@@ -29,6 +29,7 @@
 Убедитесь, что у вас установлены:
 *   Ruby версии `3.2` или выше.
 *   База данных MariaDB (или MySQL).
+*   **Redis** (лимиты создания, Rack::Attack через `SecretVault::RedisClient`). Локально: `redis-server`, по умолчанию `redis://127.0.0.1:6379/0` (dev) и `/1` (test). Переопределение: `REDIS_URL`.
 *   Системный пакет для сборки драйвера базы данных:
     ```bash
     sudo apt-get install libmariadb-dev
@@ -67,6 +68,18 @@ active_record_encryption:
 export ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY="СТРОКА_1"
 export ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY="СТРОКА_2"
 export ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT="СТРОКА_3"
+```
+
+Опционально Redis (если не дефолтный хост/БД):
+
+```bash
+export REDIS_URL="redis://127.0.0.1:6379/0"
+```
+
+Сброс лимитов в dev (очищает текущую Redis DB, не трогая MariaDB):
+
+```bash
+bin/rails runner 'SecretVault::RedisClient.flushdb'
 ```
 
 В development и test при отсутствии ENV/credentials используются локальные ключи из [`config/initializers/active_record_encryption.rb`](config/initializers/active_record_encryption.rb) — для production задайте свои значения обязательно.
