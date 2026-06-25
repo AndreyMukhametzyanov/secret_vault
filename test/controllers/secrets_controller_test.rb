@@ -35,6 +35,37 @@ class SecretsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "create applies plan limits for expires and max_reads" do
+    freeze_time do
+      post secrets_path,
+        params: { secret: { body: "timed", expires_in: "7d", max_reads: 5 } }
+
+      secret = Secret.order(:created_at).last
+      assert_equal 1, secret.max_reads
+      assert_in_delta 24.hours.from_now.to_i, secret.expires_at.to_i, 2
+    end
+  end
+
+  test "show allows multiple views when max_reads is greater than one" do
+    secret = Secret.create!(
+      encrypted_body: "triple",
+      expires_at: 1.hour.from_now,
+      max_reads: 3
+    )
+
+    2.times do
+      get secret_path(secret)
+      assert_response :success
+      assert_match "triple", response.body
+      assert Secret.exists?(secret.id)
+    end
+
+    get secret_path(secret)
+    assert_response :success
+    assert_match "triple", response.body
+    assert_not Secret.exists?(secret.id)
+  end
+
   test "show burns secret on first view" do
     secret = Secret.create!(encrypted_body: "once", expires_at: 1.hour.from_now)
     get secret_path(secret)

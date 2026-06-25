@@ -1,18 +1,23 @@
 class SecretsController < ApplicationController
   def new
-    @secret = Secret.new
+    @secret = Secret.new(
+      max_reads: PlanLimits.default_max_reads
+    )
+    @default_expires_in = PlanLimits.default_expires_in_key
   end
 
   def create
     unless Secrets::CreateRateLimit.allowed?(client_ip)
       @secret = Secret.new
       flash.now[:alert] = t("secrets.create.rate_limit_exceeded")
+      @default_expires_in = PlanLimits.default_expires_in_key
       return render :new, status: :too_many_requests
     end
 
     @secret = Secret.new(
       encrypted_body: secret_params[:body],
-      expires_at: 24.hours.from_now
+      expires_at: PlanLimits.resolve_expires_at(secret_params[:expires_in]),
+      max_reads: PlanLimits.resolve_max_reads(secret_params[:max_reads])
     )
     @secret.password = secret_params[:passphrase] if secret_params[:passphrase].present?
 
@@ -21,6 +26,7 @@ class SecretsController < ApplicationController
       Secrets::CreateRateLimit.record!(client_ip)
       redirect_to success_secret_path(@secret, token: creator_token)
     else
+      @default_expires_in = PlanLimits.default_expires_in_key
       render :new, status: :unprocessable_entity
     end
   end
@@ -43,6 +49,7 @@ class SecretsController < ApplicationController
     end
 
     @decrypted_body = @secret.read_and_destroy!
+    assign_read_context!(@secret)
   rescue ActiveRecord::RecordNotFound
     @expired = true
   end
@@ -52,6 +59,7 @@ class SecretsController < ApplicationController
 
     if @secret.authenticate(reveal_params[:password_attempt])
       @decrypted_body = @secret.read_and_destroy!
+      assign_read_context!(@secret)
       render :show
     else
       @secret.record_failed_passphrase!
@@ -73,7 +81,12 @@ class SecretsController < ApplicationController
   private
 
   def secret_params
-    params.require(:secret).permit(:body, :passphrase)
+    params.require(:secret).permit(:body, :passphrase, :expires_in, :max_reads)
+  end
+
+  def assign_read_context!(secret)
+    @max_reads = secret.max_reads
+    @reads_count_after = secret.reads_count
   end
 
   def reveal_params

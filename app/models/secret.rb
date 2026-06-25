@@ -11,6 +11,7 @@ class Secret < ApplicationRecord
 
   validates :encrypted_body, presence: true
   validates :expires_at, presence: true
+  validates :max_reads, numericality: { only_integer: true, in: 1..10 }
   validate :encrypted_body_within_size_limit
   validates :password, length: { minimum: 4 }, allow_blank: true
 

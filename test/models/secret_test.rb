@@ -22,4 +22,30 @@ class SecretTest < ActiveSupport::TestCase
     assert_equal "hello", text
     assert_not Secret.exists?(secret.id)
   end
+
+  test "read_and_destroy allows multiple views until max_reads" do
+    secret = Secret.create!(
+      encrypted_body: "multi",
+      expires_at: 1.hour.from_now,
+      max_reads: 3
+    )
+
+    2.times do
+      assert_equal "multi", secret.reload.read_and_destroy!
+      assert Secret.exists?(secret.id)
+      assert_operator secret.reads_count, :<, 3
+    end
+
+    assert_equal "multi", secret.reload.read_and_destroy!
+    assert_not Secret.exists?(secret.id)
+  end
+
+  test "rejects max_reads above 10" do
+    secret = Secret.new(
+      encrypted_body: "x",
+      expires_at: 1.hour.from_now,
+      max_reads: 11
+    )
+    assert_not secret.valid?
+  end
 end
