@@ -1,5 +1,12 @@
 en:
   hello: "Hello world"
+
+  pages:
+    shared:
+      back_home: "Home"
+      breadcrumb_home: "Home"
+      breadcrumb_aria_label: "Breadcrumb"
+
   secrets:
     create:
       rate_limit_exceeded: "Daily link creation limit reached for your IP. Try again tomorrow."

@@ -1,0 +1,19 @@
+- content_for :title, legal_page_t(:meta_title)
+
+.container.py-5
+  .row.justify-content-center
+    .col-lg-8
+      nav.mb-3 aria-label=t("pages.shared.breadcrumb_aria_label")
+        ol.breadcrumb.small.mb-0
+          li.breadcrumb-item
+            = link_to t("pages.shared.breadcrumb_home"), root_path
+          li.breadcrumb-item.active aria-current="page"
+            = legal_page_t(:title)
+
+      .card.shadow-sm.border-0.legal-card
+        .card-body.p-4.p-md-5
+          h1.h3.fw-bold.text-dark.mb-2 = legal_page_t(:title)
+          - if (date_label = legal_page_date_label).present?
+            p.text-muted.small.mb-4 = date_label
+          .pages-prose
+            = yield

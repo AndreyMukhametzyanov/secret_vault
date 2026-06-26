@@ -1,0 +1,37 @@
+.pages-prose h2:first-child {
+  margin-top: 0 !important;
+}
+
+.pages-prose p {
+  line-height: 1.65;
+}
+
+.legal-prose-block ul {
+  margin: 0.5rem 0 1rem;
+  padding-left: 1.25rem;
+}
+
+.legal-prose-block ul li {
+  margin-bottom: 0.35rem;
+}
+
+.legal-prose-block strong {
+  color: var(--bs-body-color);
+}
+
+.landing-hero {
+  background: linear-gradient(165deg, #f8f9fc 0%, #eef2ff 45%, #f8f9fa 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.legal-card {
+  border-radius: 0.75rem;
+}
+
+.breadcrumb-item a {
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,6 @@
+- sections.each do |section|
+  - heading = section[:heading] || section["heading"]
+  - body = section[:body] || section["body"]
+  h2.h5.fw-semibold.mt-4.mb-2 = heading
+  .text-muted.small.mb-4.legal-prose-block
+    = legal_prose_html(body)

@@ -1,0 +1,60 @@
+- content_for :title, t(".meta_title")
+
+section.landing-hero.py-5.mb-4
+  .container
+    .row.justify-content-center.text-center
+      .col-lg-8
+        p.text-primary.fw-semibold.mb-2 = t("layouts.application.slogan")
+        h1.display-5.fw-bold.text-dark.mb-3 = t(".title")
+        p.lead.text-muted.mb-4 = t(".lead")
+        .d-flex.flex-column.flex-sm-row.gap-2.justify-content-center
+          = link_to t(".cta_primary"), new_secret_path, class: "btn btn-primary btn-lg px-4 fw-medium"
+          = link_to t(".cta_security"), security_path, class: "btn btn-outline-secondary btn-lg px-4 fw-medium"
+
+.container
+  .row.g-4.mb-5
+    - 3.times do |i|
+      .col-md-4
+        .card.h-100.shadow-sm.border-0
+          .card-body.p-4.text-center
+            .display-6.mb-2 = t(".steps.step_#{i + 1}.icon")
+            h2.h5.fw-bold = t(".steps.step_#{i + 1}.title")
+            p.card-text.text-muted.small.mb-0 = t(".steps.step_#{i + 1}.body")
+
+  .row.justify-content-center.mb-5
+    .col-lg-10
+      .card.shadow-sm.border-0
+        .card-header.bg-white.border-0.pt-4.px-4
+          h2.h4.fw-bold.mb-0 = t(".plans.title")
+        .card-body.p-0
+          .table-responsive
+            table.table.table-borderless.mb-0.align-middle
+              thead.text-muted.small
+                tr
+                  th.ps-4 = t(".plans.feature")
+                  th.text-center = t(".plans.free")
+                  th.text-center = t(".plans.pro")
+              tbody
+                - %w[ttl reads passphrase notify].each do |row|
+                  tr.border-top
+                    td.ps-4.fw-medium = t(".plans.rows.#{row}.label")
+                    td.text-center.text-muted.small = t(".plans.rows.#{row}.free")
+                    td.text-center.text-primary.small.fw-semibold = t(".plans.rows.#{row}.pro")
+        .card-footer.bg-light.border-0.px-4.py-3.text-center.small.text-muted
+          = t(".plans.pro_note")
+
+  .row.justify-content-center.mb-5
+    .col-lg-8
+      h2.h4.fw-bold.text-center.mb-4 = t(".faq.title")
+      .accordion#homeFaq
+        - 4.times do |i|
+          .accordion-item.border-0.shadow-sm.mb-2.rounded.overflow-hidden
+            h3.accordion-header
+              button.accordion-button.collapsed.fw-semibold[type="button" data-bs-toggle="collapse" data-bs-target="#faq#{i}" aria-expanded="false"]
+                = t(".faq.items.q#{i + 1}")
+            .accordion-collapse.collapse[id="faq#{i}" data-bs-parent="#homeFaq"]
+              .accordion-body.text-muted.small
+                = t(".faq.items.a#{i + 1}")
+
+  .text-center.pb-4
+    = link_to t(".cta_primary"), new_secret_path, class: "btn btn-primary btn-lg px-5 fw-medium"

@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  helper PagesHelper
   helper_method :plan_limits
 
   private

@@ -1,0 +1,18 @@
+p.text-muted.mb-4 = legal_page_t(:intro)
+
+.row.g-3
+  - legal_page_checklist.each do |item|
+    - title = item[:title] || item["title"]
+    - body = item[:body] || item["body"]
+    .col-md-6
+      .p-3.bg-light.rounded-3.h-100.border.border-light
+        h2.h6.fw-bold.text-dark.mb-2
+          span.text-primary.me-2 ✓
+          = title
+        .text-muted.small.legal-prose-block
+          = legal_prose_html(body)
+
+.mt-4.alert.alert-warning.border-0.shadow-sm
+  h2.h6.fw-bold.mb-2 = legal_page_t("honest_notice.title")
+  .small.mb-0.legal-prose-block
+    = legal_prose_html(legal_page_t("honest_notice.body"))
