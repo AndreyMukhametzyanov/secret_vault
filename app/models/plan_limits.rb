@@ -43,6 +43,10 @@ class PlanLimits
     allowed_max_reads_values.include?(value.to_i)
   end
 
+  def passphrase_enabled?
+    pro?
+  end
+
   def resolve_expires_at(expires_in_key)
     key = expires_in_key.to_s.presence || default_expires_in_key
     key = default_expires_in_key unless expires_in_enabled?(key)

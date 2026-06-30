@@ -81,6 +81,22 @@ class SecretsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "free tier ignores passphrase on create" do
+    post secrets_path, params: { secret: { body: "x", passphrase: "abcd" } }
+    secret = Secret.order(:created_at).last
+    assert_not secret.password_protected?
+  end
+
+  test "pro user can set passphrase on create" do
+    user = User.create!(email: "pro-pass@example.com", password: "password123")
+    user.create_subscription!(status: "active", current_period_ends_at: 1.month.from_now)
+    sign_in user
+
+    post secrets_path, params: { secret: { body: "x", passphrase: "abcd" } }
+    secret = Secret.order(:created_at).last
+    assert secret.password_protected?
+  end
+
   test "show allows multiple views when max_reads is greater than one" do
     secret = Secret.create!(
       encrypted_body: "triple",

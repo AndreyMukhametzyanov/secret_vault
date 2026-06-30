@@ -19,7 +19,7 @@ class SecretsController < ApplicationController
       max_reads: @plan_limits.resolve_max_reads(secret_params[:max_reads]),
       creator_user: current_user
     )
-    @secret.password = secret_params[:passphrase] if secret_params[:passphrase].present?
+    apply_passphrase!(@secret, secret_params[:passphrase])
 
     if @secret.save
       creator_token = @secret.assign_creator_token!
@@ -89,6 +89,13 @@ class SecretsController < ApplicationController
 
   def secret_params
     params.require(:secret).permit(:body, :passphrase, :expires_in, :max_reads)
+  end
+
+  def apply_passphrase!(secret, passphrase)
+    return if passphrase.blank?
+    return unless @plan_limits.passphrase_enabled?
+
+    secret.password = passphrase
   end
 
   def assign_read_context!(secret)

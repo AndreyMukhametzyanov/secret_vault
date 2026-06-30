@@ -12,6 +12,7 @@ class PlanLimitsTest < ActiveSupport::TestCase
       assert_equal [ 1 ], limits.allowed_max_reads_values
       assert_not limits.expires_in_enabled?("7d")
       assert_not limits.max_reads_enabled?(3)
+      assert_not limits.passphrase_enabled?
     end
   end
 
@@ -32,6 +33,7 @@ class PlanLimitsTest < ActiveSupport::TestCase
 
     limits = PlanLimits.for(pro_user)
     assert limits.pro?
+    assert limits.passphrase_enabled?
     assert_equal PlanLimits::PRO_EXPIRES_IN_KEYS, limits.allowed_expires_in_keys
     assert_equal "24h", limits.default_expires_in_key
     assert_equal PlanLimits::MAX_READS_CHOICES, limits.allowed_max_reads_values

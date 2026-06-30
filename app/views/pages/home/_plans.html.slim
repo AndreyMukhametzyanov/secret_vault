@@ -13,7 +13,7 @@ section#pricing.container.mb-5 aria-labelledby="pricing-heading"
                   th.text-center = t("pages.home.plans.free")
                   th.text-center = t("pages.home.plans.pro")
               tbody
-                - %w[ttl reads passphrase notify].each do |row|
+                - %w[ttl reads passphrase].each do |row|
                   tr.border-top
                     td.ps-4.fw-medium = t("pages.home.plans.rows.#{row}.label")
                     td.text-center.text-muted.small = t("pages.home.plans.rows.#{row}.free")
