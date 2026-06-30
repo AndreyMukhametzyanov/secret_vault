@@ -8,7 +8,8 @@
             = render "devise/shared/error_messages", resource: resource
             div
               = f.label :email, class: "form-label small fw-semibold text-secondary"
-              = f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true
+              = f.email_field :email, autofocus: true, autocomplete: "email", class: form_control_class(resource, :email), required: true
+              = render "shared/field_errors", object: resource, attribute: :email
             - if devise_mapping.confirmable? && resource.pending_reconfirmation?
               p.text-muted.small = t("devise.registrations.edit.pending_reconfirmation", email: resource.unconfirmed_email, default: "Ожидается подтверждение: %{email}")
             div
@@ -19,14 +20,17 @@
                   | (
                   = t("devise.shared.minimum_password_length", count: @minimum_password_length)
                   | )
-              = f.password_field :password, autocomplete: "new-password", class: "form-control"
+              = f.password_field :password, autocomplete: "new-password", class: form_control_class(resource, :password)
+              = render "shared/field_errors", object: resource, attribute: :password
             div
               = f.label :password_confirmation, class: "form-label small fw-semibold text-secondary"
-              = f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control"
+              = f.password_field :password_confirmation, autocomplete: "new-password", class: form_control_class(resource, :password_confirmation)
+              = render "shared/field_errors", object: resource, attribute: :password_confirmation
             div
               = f.label :current_password, class: "form-label small fw-semibold text-secondary"
               span.text-muted.small = t("devise.registrations.edit.current_password_hint", default: "нужен для сохранения изменений")
-              = f.password_field :current_password, autocomplete: "current-password", class: "form-control", required: true
+              = f.password_field :current_password, autocomplete: "current-password", class: form_control_class(resource, :current_password), required: true
+              = render "shared/field_errors", object: resource, attribute: :current_password
             = f.submit t("devise.registrations.edit.submit", default: "Сохранить"), class: "btn btn-primary w-100"
           .mt-4.pt-4.border-top
             h2.h6.fw-bold.mb-2 = t("billing.show.title")

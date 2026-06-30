@@ -1,7 +1,5 @@
-- if resource.errors.any?
-  #error_explanation.alert.alert-danger.small
-    p.fw-semibold.mb-2
-      = I18n.t("errors.messages.not_saved", count: resource.errors.count)
+- if resource.errors[:base].any?
+  .alert.alert-danger.small.mb-3 role="alert"
     ul.mb-0.ps-3
-      - resource.errors.full_messages.each do |message|
+      - resource.errors[:base].each do |message|
         li = message

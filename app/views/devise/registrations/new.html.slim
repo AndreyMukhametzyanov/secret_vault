@@ -9,7 +9,8 @@
             = render "devise/shared/error_messages", resource: resource
             div
               = f.label :email, class: "form-label small fw-semibold text-secondary"
-              = f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true
+              = f.email_field :email, autofocus: true, autocomplete: "email", class: form_control_class(resource, :email), required: true
+              = render "shared/field_errors", object: resource, attribute: :email
             div
               = f.label :password, class: "form-label small fw-semibold text-secondary"
               - if @minimum_password_length
@@ -17,10 +18,12 @@
                   | (
                   = t("devise.shared.minimum_password_length", count: @minimum_password_length)
                   | )
-              = f.password_field :password, autocomplete: "new-password", class: "form-control", required: true
+              = f.password_field :password, autocomplete: "new-password", class: form_control_class(resource, :password), required: true
+              = render "shared/field_errors", object: resource, attribute: :password
             div
               = f.label :password_confirmation, class: "form-label small fw-semibold text-secondary"
-              = f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", required: true
+              = f.password_field :password_confirmation, autocomplete: "new-password", class: form_control_class(resource, :password_confirmation), required: true
+              = render "shared/field_errors", object: resource, attribute: :password_confirmation
             fieldset.border-0.p-0.mb-2 aria-labelledby="registration-consents-legend"
               legend#registration-consents-legend.form-label.small.fw-semibold.text-secondary.mb-2 = t("legal.registration_fieldset")
               = render "shared/consent_checkbox", id: "agree_terms", required: true, label_html: t("legal.agree_terms_html")

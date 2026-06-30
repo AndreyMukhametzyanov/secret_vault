@@ -1,0 +1,4 @@
+-# object:, attribute:
+- if object.errors[attribute].any?
+  .invalid-feedback.d-block
+    = object.errors[attribute].first
