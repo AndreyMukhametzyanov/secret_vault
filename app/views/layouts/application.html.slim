@@ -23,6 +23,10 @@ html lang=I18n.locale
                 li
                   h6.dropdown-header.text-truncate.mb-0 = current_user.email
                 li
+                  = link_to t("layouts.application.nav.billing"), billing_path, class: "dropdown-item small"
+                li
+                  = link_to t("billing.show.account_settings"), edit_user_registration_path, class: "dropdown-item small"
+                li
                   hr.dropdown-divider
                 li
                   = link_to t("layouts.application.nav.sign_out"), destroy_user_session_path, class: "dropdown-item small"

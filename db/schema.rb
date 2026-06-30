@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_30_204600) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_30_215159) do
+  create_table "billing_payments", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "yookassa_payment_id", null: false
+    t.integer "amount_cents", null: false
+    t.string "currency", default: "RUB", null: false
+    t.string "status", default: "pending", null: false
+    t.string "purpose", null: false
+    t.text "metadata", size: :long, collation: "utf8mb4_bin"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_billing_payments_on_user_id"
+    t.index ["yookassa_payment_id"], name: "index_billing_payments_on_yookassa_payment_id", unique: true
+    t.check_constraint "json_valid(`metadata`)", name: "metadata"
+  end
+
   create_table "secrets", id: { type: :string, limit: 36 }, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.text "encrypted_body", null: false
     t.string "password_digest"
@@ -25,6 +40,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_30_204600) do
     t.index ["creator_user_id"], name: "index_secrets_on_creator_user_id"
   end
 
+  create_table "subscriptions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "status", default: "pending", null: false
+    t.string "yookassa_payment_method_id"
+    t.datetime "current_period_ends_at"
+    t.boolean "auto_renew", default: true, null: false
+    t.datetime "canceled_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "pro_terms_accepted_at"
+    t.datetime "auto_renew_consent_at"
+    t.datetime "payment_partner_consent_at"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id", unique: true
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -33,9 +63,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_30_204600) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "terms_accepted_at"
+    t.datetime "privacy_accepted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "billing_payments", "users"
   add_foreign_key "secrets", "users", column: "creator_user_id"
+  add_foreign_key "subscriptions", "users"
 end

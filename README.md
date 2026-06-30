@@ -18,6 +18,8 @@
 | Кодовое слово | да | да |
 | Уведомление об открытии | — | email |
 
+Подписка Pro (в разработке): платёжный провайдер — **ЮKassa** (автоплатежи). План интеграции: [docs/yookassa-integration.md](docs/yookassa-integration.md).
+
 Главная страница (`/`) — лендинг с блоками «как работает», сравнением тарифов и FAQ по безопасности; CTA ведёт на создание секрета без регистрации.
 
 ### Публичные legal-страницы
@@ -111,6 +113,23 @@ bin/rails runner 'SecretVault::RedisClient.flushdb'
 ```
 
 В development и test при отсутствии ENV/credentials используются локальные ключи из [`config/initializers/active_record_encryption.rb`](config/initializers/active_record_encryption.rb) — для production задайте свои значения обязательно.
+
+```bash
+export YOOKASSA_SHOP_ID="..."
+export YOOKASSA_SECRET_KEY="..."
+# опционально; иначе строится из action_mailer.default_url_options
+export YOOKASSA_RETURN_URL="https://your-host/billing/return"
+```
+
+Либо в `bin/rails credentials:edit`:
+
+```yaml
+yookassa:
+  shop_id: ...
+  secret_key: ...
+```
+
+Webhook в ЛК ЮKassa: `POST /webhooks/yookassa`. Подробнее: [docs/yookassa-integration.md](docs/yookassa-integration.md).
 
 ### 5. Запуск сервера
 Запустите веб-сервер Puma командой:

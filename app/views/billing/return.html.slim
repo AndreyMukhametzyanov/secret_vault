@@ -1,0 +1,8 @@
+.container.py-5
+  .row.justify-content-center
+    .col-md-8.col-lg-6
+      .card.shadow-sm.border-0
+        .card-body.p-4.p-md-5.text-center
+          h1.h4.fw-bold.mb-3 = t("billing.return.title")
+          p.text-muted.small.mb-4 = t("billing.return.lead")
+          = link_to t("billing.return.to_billing"), billing_path, class: "btn btn-primary"

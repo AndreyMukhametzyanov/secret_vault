@@ -27,10 +27,8 @@ class PlanLimitsTest < ActiveSupport::TestCase
   end
 
   test "pro account allows extended ttl and reads" do
-    pro_user = User.new(email: "pro@example.com")
-    def pro_user.pro?
-      true
-    end
+    pro_user = User.create!(email: "pro@example.com", password: "password123")
+    pro_user.create_subscription!(status: "active", current_period_ends_at: 1.month.from_now)
 
     limits = PlanLimits.for(pro_user)
     assert limits.pro?

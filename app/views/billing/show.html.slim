@@ -1,0 +1,37 @@
+.container.py-5
+  .row.justify-content-center
+    .col-lg-8
+      .card.shadow-sm.border-0
+        .card-body.p-4.p-md-5
+          h1.h3.fw-bold.mb-2 = t("billing.show.title")
+          p.text-muted.small.mb-4 = t("billing.show.lead")
+
+          - if @subscription&.pro_entitled?
+            .alert.alert-success.border-0
+              strong = t("billing.show.pro_active")
+              - if @subscription.current_period_ends_at
+                .small.mt-1 = t("billing.show.period_ends", date: l(@subscription.current_period_ends_at, format: :long))
+              - if @subscription.auto_renew?
+                .small.text-muted.mt-2 = t("billing.show.auto_renew_on")
+              - else
+                .small.text-muted.mt-2 = t("billing.show.auto_renew_off")
+
+            - if @subscription.auto_renew?
+              = button_to t("billing.show.cancel_auto_renew"), billing_cancel_auto_renew_path, method: :patch, class: "btn btn-outline-secondary btn-sm mt-2"
+          - else
+            p.mb-4 = t("billing.show.free_plan")
+
+            - if Yookassa::Configuration.configured?
+              = form_with url: billing_checkout_path, method: :post, class: "vstack gap-3" do
+                fieldset.border-0.p-0 aria-labelledby="billing-consents-legend"
+                  legend#billing-consents-legend.form-label.small.fw-semibold.text-secondary.mb-2 = t("legal.billing_fieldset")
+                  = render "shared/consent_checkbox", id: "agree_pro_terms", required: true, label_html: t("legal.agree_pro_terms_html")
+                  = render "shared/consent_checkbox", id: "agree_auto_renew", required: true, label_html: t("legal.agree_auto_renew_html", price: Billing::ProPlan::MONTHLY_AMOUNT_CENTS / 100)
+                  = render "shared/consent_checkbox", id: "agree_payment_partner", required: true, label_html: t("legal.agree_payment_partner_html")
+                = submit_tag t("billing.show.checkout", price: Billing::ProPlan::MONTHLY_AMOUNT_CENTS / 100), class: "btn btn-primary"
+            - else
+              .alert.alert-warning.border-0.small.mb-0 = t("billing.not_configured")
+
+          .mt-4.pt-3.border-top.small
+            = link_to t("pages.shared.back_home"), root_path, class: "text-decoration-none me-3"
+            = link_to t("billing.show.account_settings"), edit_user_registration_path, class: "text-decoration-none"

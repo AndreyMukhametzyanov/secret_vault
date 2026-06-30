@@ -3,7 +3,7 @@
     .col-md-6.col-lg-5
       .card.shadow-sm.border-0
         .card-body.p-4.p-md-5
-          h1.h3.fw-bold.mb-4 = t("devise.registrations.edit.title", default: "Настройки аккаунта")
+          h1.h3.fw-bold.mb-4 = t("devise.registrations.edit.title")
           = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "vstack gap-3" }) do |f|
             = render "devise/shared/error_messages", resource: resource
             div
@@ -28,10 +28,34 @@
               span.text-muted.small = t("devise.registrations.edit.current_password_hint", default: "нужен для сохранения изменений")
               = f.password_field :current_password, autocomplete: "current-password", class: "form-control", required: true
             = f.submit t("devise.registrations.edit.submit", default: "Сохранить"), class: "btn btn-primary w-100"
-          .mt-5.pt-4.border-top
-            h2.h6.fw-bold.mb-2 = t("devise.registrations.edit.cancel_title", default: "Удалить аккаунт")
-            p.text-muted.small.mb-3 = t("devise.registrations.edit.cancel_lead", default: "Все связанные данные будут отвязаны. Секреты без аккаунта останутся как гостевые.")
-            - cancel_confirm = j(t("devise.registrations.edit.cancel_confirm", default: "Удалить аккаунт безвозвратно?"))
-            = button_to t("devise.registrations.edit.cancel_submit", default: "Удалить аккаунт"), registration_path(resource_name), method: :delete, form: { onsubmit: "return confirm('#{cancel_confirm}');" }, class: "btn btn-outline-danger btn-sm"
+          .mt-4.pt-4.border-top
+            h2.h6.fw-bold.mb-2 = t("billing.show.title")
+            p.text-muted.small.mb-3 = t("billing.show.lead_short")
+            = link_to t("layouts.application.nav.billing"), billing_path, class: "btn btn-outline-primary btn-sm"
+          .mt-5.pt-4.border-top data-controller="confirm-modal"
+            h2.h6.fw-bold.mb-2 = t("devise.registrations.edit.cancel_title")
+            p.text-muted.small.mb-3 = t("devise.registrations.edit.cancel_lead")
+            button.btn.btn-outline-danger.btn-sm type="button" data-action="confirm-modal#open"
+              = t("devise.registrations.edit.cancel_submit")
+            = button_to t("devise.registrations.edit.cancel_submit"),
+              registration_path(resource_name),
+              method: :delete,
+              form: { data: { confirm_modal_target: "form" }, class: "d-none" },
+              class: "d-none",
+              tabindex: "-1",
+              aria: { hidden: "true" }
+            #delete-account-modal.modal.fade tabindex="-1" aria-labelledby="delete-account-modal-title" aria-hidden="true" data-confirm-modal-target="modal"
+              .modal-dialog.modal-dialog-centered
+                .modal-content
+                  .modal-header
+                    h5#delete-account-modal-title.modal-title = t("devise.registrations.edit.cancel_modal_title")
+                    button.btn-close type="button" data-bs-dismiss="modal" aria-label=t("devise.registrations.edit.cancel_modal_cancel")
+                  .modal-body.small
+                    p.mb-0 = t("devise.registrations.edit.cancel_modal_body")
+                  .modal-footer
+                    button.btn.btn-secondary.btn-sm type="button" data-bs-dismiss="modal"
+                      = t("devise.registrations.edit.cancel_modal_cancel")
+                    button.btn.btn-danger.btn-sm type="button" data-action="confirm-modal#confirm"
+                      = t("devise.registrations.edit.cancel_modal_confirm")
           .mt-4.small
             = link_to t("pages.shared.back_home", default: "На главную"), root_path, class: "text-decoration-none"

@@ -1,4 +1,13 @@
 ru:
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      not_saved:
+        one: "Не удалось сохранить — %{count} ошибка:"
+        few: "Не удалось сохранить — %{count} ошибки:"
+        many: "Не удалось сохранить — %{count} ошибок:"
+        other: "Не удалось сохранить — %{count} ошибки:"
+
   layouts:
     application:
       title: "Секретница | Секрет который живёт мгновение"
@@ -10,6 +19,7 @@ ru:
         sign_up: "Регистрация"
         sign_out: "Выйти"
         account_menu: "Меню аккаунта"
+        billing: "Подписка Pro"
       footer:
         privacy: "Конфиденциальность"
         terms: "Условия"
@@ -187,11 +197,80 @@ en:
       copied: "Copied! ✓"
       another: "Create another secret"
 
+  legal:
+    consent_required: "Отметьте все обязательные согласия, чтобы продолжить."
+    registration_fieldset: "Согласия при регистрации"
+    billing_fieldset: "Согласия перед оплатой"
+    agree_terms_html: 'Я принимаю <a href="/terms" target="_blank" rel="noopener">Условия использования</a> Сервиса.'
+    agree_privacy_html: 'Я даю <a href="/privacy" target="_blank" rel="noopener">согласие на обработку персональных данных</a> в объёме, указанном в Политике конфиденциальности (152-ФЗ).'
+    agree_pro_terms_html: 'Я принимаю условия платного тарифа Pro (раздел 6 <a href="/terms" target="_blank" rel="noopener">Условий использования</a>), включая порядок оплаты и отсутствие возврата за уже оплаченный период, кроме случаев, указанных в Условиях.'
+    agree_auto_renew_html: 'Я согласен(на) на <strong>регулярное автоматическое списание %{price} ₽</strong> в начале каждого расчётного периода до отключения автопродления в личном кабинете.'
+    agree_payment_partner_html: 'Я согласен(на) на передачу данных, необходимых для оплаты (в т.ч. e-mail), платёжному партнёру <a href="https://yookassa.ru" target="_blank" rel="noopener">ЮKassa</a> на условиях <a href="/privacy" target="_blank" rel="noopener">Политики конфиденциальности</a>; реквизиты карты обрабатываются на стороне ЮKassa.'
+
+  billing:
+    not_configured: "Оплата временно недоступна — ключи ЮKassa ещё не настроены."
+    already_pro: "У вас уже активен тариф Pro."
+    checkout_failed: "Не удалось создать платёж. Попробуйте позже."
+    auto_renew_canceled: "Автопродление отключено. Pro действует до конца оплаченного периода."
+    no_active_subscription: "Нет активной подписки Pro."
+    checkout:
+      payment_description: "Секретница Pro — 1 месяц"
+    renewal:
+      payment_description: "Секретница Pro — продление"
+    show:
+      title: "Подписка Pro"
+      lead: "Расширенный срок жизни ссылок, до 5 просмотров и уведомления об открытии (по мере появления функций)."
+      lead_short: "Расширенный срок жизни ссылок и до 5 просмотров."
+      account_settings: "Настройки аккаунта"
+      pro_active: "Тариф Pro активен"
+      period_ends: "Действует до %{date}"
+      auto_renew_on: "Автопродление включено — списание в начале следующего периода."
+      auto_renew_off: "Автопродление выключено."
+      cancel_auto_renew: "Отключить автопродление"
+      free_plan: "Сейчас у вас бесплатный тариф. Оформите Pro, чтобы снять ограничения."
+      checkout: "Оформить Pro — %{price} ₽/мес"
+    return:
+      title: "Спасибо!"
+      lead: "Если оплата прошла успешно, тариф Pro включится в течение минуты. Обновите страницу подписки."
+      to_billing: "К подписке"
+
   activerecord:
+    models:
+      user:
+        one: Пользователь
+        few: Пользователя
+        many: Пользователей
+        other: Пользователей
+    attributes:
+      user:
+        email: Электронная почта
+        password: Пароль
+        password_confirmation: Подтверждение пароля
+        current_password: Текущий пароль
+        remember_me: Запомнить меня
     errors:
+      messages:
+        taken: "уже используется"
+        too_short: "слишком короткий (минимум %{count} символов)"
+        confirmation: "не совпадает"
+        blank: "не может быть пустым"
+        invalid: "имеет неверный формат"
       models:
         secret:
           attributes:
             encrypted_body:
               blank: "can't be blank"
               too_long: "is too long (maximum %{max_kb} KB)"
+        user:
+          attributes:
+            email:
+              blank: не может быть пустым
+              invalid: указан в неверном формате
+            password:
+              blank: не может быть пустым
+              too_short: слишком короткий (минимум %{count} символов)
+            password_confirmation:
+              confirmation: не совпадает с паролем
+            current_password:
+              blank: не может быть пустым
+              invalid: неверный

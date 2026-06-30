@@ -8,6 +8,14 @@ class ActiveSupport::TestCase
   setup do
     SecretVault::RedisClient.flushdb
   end
+
+  def stub_singleton(klass, method, value)
+    original = klass.method(method)
+    klass.define_singleton_method(method) { |*_args, **_kwargs| value }
+    yield
+  ensure
+    klass.define_singleton_method(method, original)
+  end
 end
 
 class ActionDispatch::IntegrationTest
