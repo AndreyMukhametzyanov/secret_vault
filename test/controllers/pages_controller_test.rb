@@ -1,6 +1,8 @@
 require "test_helper"
 
 class PagesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   test "home landing is public and links to create secret" do
     get root_url
     assert_response :success
@@ -9,6 +11,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", new_secret_path, text: I18n.t("pages.home.cta_primary")
     assert_select "#how-it-works"
     assert_select "#pricing"
+    assert_select "#pricing a[href=?]", new_user_registration_path, text: I18n.t("pages.home.plans.pro_cta")
     assert_select "#security-faq"
     assert_select "#homeFaq .accordion-item", count: 5
   end
@@ -45,5 +48,12 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", privacy_path
     assert_select "a[href=?]", terms_path
     assert_select "a[href=?]", security_path
+  end
+
+  test "home pro cta links to billing when signed in" do
+    user = User.create!(email: "home-pro@example.com", password: "password123")
+    sign_in user
+    get root_url
+    assert_select "#pricing a[href=?]", billing_path, text: I18n.t("pages.home.plans.pro_cta")
   end
 end

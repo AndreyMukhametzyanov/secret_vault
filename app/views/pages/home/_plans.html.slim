@@ -18,5 +18,19 @@ section#pricing.container.mb-5 aria-labelledby="pricing-heading"
                     td.ps-4.fw-medium = t("pages.home.plans.rows.#{row}.label")
                     td.text-center.text-muted.small = t("pages.home.plans.rows.#{row}.free")
                     td.text-center.text-primary.small.fw-semibold = t("pages.home.plans.rows.#{row}.pro")
-        .card-footer.bg-light.border-0.px-4.py-3.text-center.small.text-muted
-          = t("pages.home.plans.pro_note")
+        .card-footer.bg-light.border-0.px-4.py-4
+          .row.align-items-center.g-3
+            .col-md.text-center.text-md-start
+              - if user_signed_in? && current_user.pro?
+                p.small.text-muted.mb-0 = t("pages.home.plans.pro_active_lead")
+              - elsif user_signed_in?
+                p.small.text-muted.mb-0 = t("pages.home.plans.pro_signed_in_lead")
+              - else
+                p.small.text-muted.mb-0 = t("pages.home.plans.pro_guest_lead")
+            .col-md-auto.text-center
+              - if user_signed_in? && current_user.pro?
+                = link_to t("pages.home.plans.manage_pro"), billing_path, class: "btn btn-outline-primary px-4"
+              - elsif user_signed_in?
+                = link_to t("pages.home.plans.pro_cta"), billing_path, class: "btn btn-primary px-4"
+              - else
+                = link_to t("pages.home.plans.pro_cta"), new_user_registration_path, class: "btn btn-primary px-4"
