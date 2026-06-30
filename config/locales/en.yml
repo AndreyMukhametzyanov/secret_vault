@@ -7,6 +7,9 @@ en:
       breadcrumb_home: "Home"
       breadcrumb_aria_label: "Breadcrumb"
 
+      operator_notice: |
+        <strong>Important:</strong> Secrets are decrypted on the server when a link is opened. We do not persist or log plaintext. See <a href="/security">Security</a>.
+
   secrets:
     create:
       rate_limit_exceeded: "Daily link creation limit reached for your IP. Try again tomorrow."

@@ -15,5 +15,13 @@
           h1.h3.fw-bold.text-dark.mb-2 = legal_page_t(:title)
           - if (date_label = legal_page_date_label).present?
             p.text-muted.small.mb-4 = date_label
+          - if (notice = legal_operator_notice).present?
+            .alert.alert-secondary.border-0.small.mb-4.legal-prose-block
+              = legal_prose_html(notice)
           .pages-prose
             = yield
+
+          .mt-5.pt-3.border-top.d-flex.flex-wrap.gap-2
+            = link_to t("pages.shared.back_home"), root_path, class: "btn btn-outline-secondary btn-sm"
+            - if show_nav_create_secret?
+              = link_to t("layouts.application.nav.create"), new_secret_path, class: "btn btn-primary btn-sm"

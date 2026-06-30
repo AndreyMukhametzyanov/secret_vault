@@ -33,4 +33,9 @@ module PagesHelper
 
     nil
   end
+
+  def legal_operator_notice
+    key = "pages.shared.operator_notice"
+    t(key) if I18n.exists?(key)
+  end
 end
