@@ -17,8 +17,7 @@
 | Просмотров | 1 | до 5 |
 | Кодовое слово | — | да |
 
-Подписка Pro (в разработке): платёжный провайдер — **ЮKassa** (автоплатежи). План интеграции: [docs/yookassa-integration.md](docs/yookassa-integration.md).
-
+Подписка Pro (в разработке): платёжный провайдер — **ЮKassa** (автоплатежи).
 Главная страница (`/`) — лендинг с блоками «как работает», сравнением тарифов и FAQ по безопасности; CTA ведёт на создание секрета без регистрации.
 
 ### Публичные legal-страницы
@@ -128,7 +127,7 @@ yookassa:
   secret_key: ...
 ```
 
-Webhook в ЛК ЮKassa: `POST /webhooks/yookassa`. Подробнее: [docs/yookassa-integration.md](docs/yookassa-integration.md).
+Webhook в ЛК ЮKassa: `POST /webhooks/yookassa`.
 
 ### 5. Запуск сервера
 Запустите веб-сервер Puma командой:
