@@ -16,6 +16,6 @@ class ApplicationController < ActionController::Base
   end
 
   def plan_limits
-    PlanLimits
+    @plan_limits ||= PlanLimits.for(current_user)
   end
 end

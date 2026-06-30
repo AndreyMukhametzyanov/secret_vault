@@ -1,7 +1,8 @@
 require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "pro? is false until subscription is wired" do
+    user = User.new
+    assert_not user.pro?
+  end
 end

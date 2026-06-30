@@ -139,6 +139,10 @@ ru:
       another: "Создать еще один секрет"
 
   activerecord:
+    attributes:
+      secret:
+        encrypted_body: "Секрет"
+        password: "Кодовое слово"
     errors:
       models:
         secret:
@@ -147,6 +151,8 @@ ru:
               blank: "не может быть пустым"
               too_long: "слишком длинный (максимум %{max_kb} КБ)"
               too_short: "слишком короткий (минимум %{count} символа)"
+            password:
+              too_short: "слишком короткое (минимум %{count} символа)"
 
 en:
   layouts:

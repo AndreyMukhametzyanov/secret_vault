@@ -54,12 +54,28 @@ class SecretsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "create applies plan limits for expires and max_reads" do
+  test "signed-in free user still gets guest plan limits on create" do
+    user = User.create!(email: "free@example.com", password: "password123")
+    sign_in user
+
     freeze_time do
       post secrets_path,
         params: { secret: { body: "timed", expires_in: "7d", max_reads: 5 } }
 
       secret = Secret.order(:created_at).last
+      assert_equal user.id, secret.creator_user_id
+      assert_equal 1, secret.max_reads
+      assert_in_delta 24.hours.from_now.to_i, secret.expires_at.to_i, 2
+    end
+  end
+
+  test "guest create clamps expires and max_reads to free tier" do
+    freeze_time do
+      post secrets_path,
+        params: { secret: { body: "timed", expires_in: "7d", max_reads: 5 } }
+
+      secret = Secret.order(:created_at).last
+      assert_nil secret.creator_user_id
       assert_equal 1, secret.max_reads
       assert_in_delta 24.hours.from_now.to_i, secret.expires_at.to_i, 2
     end
