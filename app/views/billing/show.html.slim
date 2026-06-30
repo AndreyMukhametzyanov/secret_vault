@@ -6,6 +6,10 @@
           h1.h3.fw-bold.mb-2 = t("billing.show.title")
           p.text-muted.small.mb-4 = t("billing.show.lead")
 
+          .bg-light.rounded-3.p-3.mb-4
+            h2.h6.fw-semibold.mb-3 = t("billing.show.pro_includes_title")
+            = render "shared/pro_benefits_list"
+
           - if @subscription&.pro_entitled?
             .alert.alert-success.border-0
               strong = t("billing.show.pro_active")
@@ -17,9 +21,9 @@
                 .small.text-muted.mt-2 = t("billing.show.auto_renew_off")
 
             - if @subscription.auto_renew?
-              = button_to t("billing.show.cancel_auto_renew"), billing_cancel_auto_renew_path, method: :patch, class: "btn btn-outline-secondary btn-sm mt-2"
+              = button_to t("billing.show.cancel_auto_renew"), billing_cancel_auto_renew_path, method: :patch, class: "btn btn-outline-secondary w-100 mt-2"
           - else
-            p.mb-4 = t("billing.show.free_plan")
+            p.text-muted.small.mb-3 = t("billing.show.free_plan")
 
             - if Yookassa::Configuration.configured?
               = form_with url: billing_checkout_path, method: :post, class: "vstack gap-3" do
@@ -28,10 +32,11 @@
                   = render "shared/consent_checkbox", id: "agree_pro_terms", required: true, label_html: t("legal.agree_pro_terms_html")
                   = render "shared/consent_checkbox", id: "agree_auto_renew", required: true, label_html: t("legal.agree_auto_renew_html", price: Billing::ProPlan::MONTHLY_AMOUNT_CENTS / 100)
                   = render "shared/consent_checkbox", id: "agree_payment_partner", required: true, label_html: t("legal.agree_payment_partner_html")
-                = submit_tag t("billing.show.checkout", price: Billing::ProPlan::MONTHLY_AMOUNT_CENTS / 100), class: "btn btn-primary"
+                = submit_tag t("billing.show.checkout", price: Billing::ProPlan::MONTHLY_AMOUNT_CENTS / 100), class: "btn btn-primary w-100"
             - else
               .alert.alert-warning.border-0.small.mb-0 = t("billing.not_configured")
 
-          .mt-4.pt-3.border-top.small
-            = link_to t("pages.shared.back_home"), root_path, class: "text-decoration-none me-3"
-            = link_to t("billing.show.account_settings"), edit_user_registration_path, class: "text-decoration-none"
+          .mt-4.pt-4.border-top
+            .d-grid.gap-2
+              = link_to t("billing.show.account_settings"), edit_user_registration_path, class: "btn btn-outline-primary"
+              = link_to t("pages.shared.back_home"), root_path, class: "btn btn-outline-secondary"

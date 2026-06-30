@@ -1,6 +1,6 @@
 .container.py-5
   .row.justify-content-center
-    .col-md-6.col-lg-5
+    .col-md-8.col-lg-6
       .card.shadow-sm.border-0
         .card-body.p-4.p-md-5
           h1.h3.fw-bold.mb-4 = t("devise.registrations.edit.title")
@@ -14,7 +14,7 @@
               p.text-muted.small = t("devise.registrations.edit.pending_reconfirmation", email: resource.unconfirmed_email, default: "Ожидается подтверждение: %{email}")
             div
               = f.label :password, class: "form-label small fw-semibold text-secondary"
-              span.text-muted.small = t("devise.registrations.edit.password_hint", default: "оставьте пустым, если не меняете")
+              span.text-muted.small = t("devise.registrations.edit.password_hint")
               - if @minimum_password_length
                 span.text-muted.small.ms-1
                   | (
@@ -28,18 +28,27 @@
               = render "shared/field_errors", object: resource, attribute: :password_confirmation
             div
               = f.label :current_password, class: "form-label small fw-semibold text-secondary"
-              span.text-muted.small = t("devise.registrations.edit.current_password_hint", default: "нужен для сохранения изменений")
+              span.text-muted.small = t("devise.registrations.edit.current_password_hint")
               = f.password_field :current_password, autocomplete: "current-password", class: form_control_class(resource, :current_password), required: true
               = render "shared/field_errors", object: resource, attribute: :current_password
-            = f.submit t("devise.registrations.edit.submit", default: "Сохранить"), class: "btn btn-primary w-100"
+            = f.submit t("devise.registrations.edit.submit"), class: "btn btn-primary w-100"
+
           .mt-4.pt-4.border-top
-            h2.h6.fw-bold.mb-2 = t("billing.show.title")
-            p.text-muted.small.mb-3 = t("billing.show.lead_short")
-            = link_to t("layouts.application.nav.billing"), billing_path, class: "btn btn-outline-primary btn-sm"
-          .mt-5.pt-4.border-top data-controller="confirm-modal"
+            .d-flex.flex-wrap.align-items-center.justify-content-between.gap-2.mb-3
+              h2.h6.fw-bold.mb-0 = t("devise.registrations.edit.pro_section_title")
+              - if current_user.pro?
+                span.badge.text-bg-success = t("devise.registrations.edit.pro_status_active")
+              - else
+                span.badge.text-bg-secondary = t("devise.registrations.edit.pro_status_free")
+            p.text-muted.small.mb-3 = t("devise.registrations.edit.pro_section_lead")
+            .bg-light.rounded-3.p-3.mb-3
+              = render "shared/pro_benefits_list"
+            = link_to(current_user.pro? ? t("devise.registrations.edit.pro_manage") : t("devise.registrations.edit.pro_get"), billing_path, class: "btn btn-primary w-100")
+
+          .mt-4.pt-4.border-top data-controller="confirm-modal"
             h2.h6.fw-bold.mb-2 = t("devise.registrations.edit.cancel_title")
             p.text-muted.small.mb-3 = t("devise.registrations.edit.cancel_lead")
-            button.btn.btn-outline-danger.btn-sm type="button" data-action="confirm-modal#open"
+            button.btn.btn-outline-danger.w-100 type="button" data-action="confirm-modal#open"
               = t("devise.registrations.edit.cancel_submit")
             = button_to t("devise.registrations.edit.cancel_submit"),
               registration_path(resource_name),
@@ -61,5 +70,6 @@
                       = t("devise.registrations.edit.cancel_modal_cancel")
                     button.btn.btn-danger.btn-sm type="button" data-action="confirm-modal#confirm"
                       = t("devise.registrations.edit.cancel_modal_confirm")
-          .mt-4.small
-            = link_to t("pages.shared.back_home", default: "На главную"), root_path, class: "text-decoration-none"
+
+          .mt-4.pt-4.border-top
+            = link_to t("pages.shared.back_home"), root_path, class: "btn btn-outline-secondary w-100"
