@@ -1,0 +1,37 @@
+.container.py-5
+  .row.justify-content-center
+    .col-md-6.col-lg-5
+      .card.shadow-sm.border-0
+        .card-body.p-4.p-md-5
+          h1.h3.fw-bold.mb-4 = t("devise.registrations.edit.title", default: "Настройки аккаунта")
+          = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "vstack gap-3" }) do |f|
+            = render "devise/shared/error_messages", resource: resource
+            div
+              = f.label :email, class: "form-label small fw-semibold text-secondary"
+              = f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true
+            - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+              p.text-muted.small = t("devise.registrations.edit.pending_reconfirmation", email: resource.unconfirmed_email, default: "Ожидается подтверждение: %{email}")
+            div
+              = f.label :password, class: "form-label small fw-semibold text-secondary"
+              span.text-muted.small = t("devise.registrations.edit.password_hint", default: "оставьте пустым, если не меняете")
+              - if @minimum_password_length
+                span.text-muted.small.ms-1
+                  | (
+                  = t("devise.shared.minimum_password_length", count: @minimum_password_length)
+                  | )
+              = f.password_field :password, autocomplete: "new-password", class: "form-control"
+            div
+              = f.label :password_confirmation, class: "form-label small fw-semibold text-secondary"
+              = f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control"
+            div
+              = f.label :current_password, class: "form-label small fw-semibold text-secondary"
+              span.text-muted.small = t("devise.registrations.edit.current_password_hint", default: "нужен для сохранения изменений")
+              = f.password_field :current_password, autocomplete: "current-password", class: "form-control", required: true
+            = f.submit t("devise.registrations.edit.submit", default: "Сохранить"), class: "btn btn-primary w-100"
+          .mt-5.pt-4.border-top
+            h2.h6.fw-bold.mb-2 = t("devise.registrations.edit.cancel_title", default: "Удалить аккаунт")
+            p.text-muted.small.mb-3 = t("devise.registrations.edit.cancel_lead", default: "Все связанные данные будут отвязаны. Секреты без аккаунта останутся как гостевые.")
+            - cancel_confirm = j(t("devise.registrations.edit.cancel_confirm", default: "Удалить аккаунт безвозвратно?"))
+            = button_to t("devise.registrations.edit.cancel_submit", default: "Удалить аккаунт"), registration_path(resource_name), method: :delete, form: { onsubmit: "return confirm('#{cancel_confirm}');" }, class: "btn btn-outline-danger btn-sm"
+          .mt-4.small
+            = link_to t("pages.shared.back_home", default: "На главную"), root_path, class: "text-decoration-none"

@@ -1,0 +1,37 @@
+ru:
+  devise:
+    failure:
+      already_authenticated: "Вы уже вошли в систему."
+      invalid: "Неверный %{authentication_keys} или пароль."
+      not_found_in_database: "Неверный %{authentication_keys} или пароль."
+      unauthenticated: "Войдите или зарегистрируйтесь, чтобы продолжить."
+    sessions:
+      signed_in: "Вы вошли в аккаунт."
+      signed_out: "Вы вышли из аккаунта."
+      already_signed_out: "Вы вышли из аккаунта."
+      new:
+        title: "Вход"
+        submit: "Войти"
+    registrations:
+      signed_up: "Регистрация прошла успешно."
+      destroyed: "Аккаунт удалён."
+      new:
+        title: "Регистрация"
+        lead: "Аккаунт нужен для Pro и уведомлений. Секреты можно создавать и без регистрации."
+        submit: "Зарегистрироваться"
+    passwords:
+      send_instructions: "Инструкции по сбросу пароля отправлены на email."
+      updated: "Пароль изменён."
+      new:
+        title: "Восстановление пароля"
+        submit: "Отправить инструкции"
+    shared:
+      minimum_password_length:
+        one: "минимум %{count} символ"
+        few: "минимум %{count} символа"
+        many: "минимум %{count} символов"
+        other: "минимум %{count} символа"
+      links:
+        sign_in: "Войти"
+        sign_up: "Регистрация"
+        forgot_password: "Забыли пароль?"

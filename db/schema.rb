@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_21_202438) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_30_204600) do
   create_table "secrets", id: { type: :string, limit: 36 }, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.text "encrypted_body", null: false
     t.string "password_digest"
@@ -21,5 +21,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_21_202438) do
     t.string "creator_token_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "creator_user_id"
+    t.index ["creator_user_id"], name: "index_secrets_on_creator_user_id"
   end
+
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  add_foreign_key "secrets", "users", column: "creator_user_id"
 end

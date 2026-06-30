@@ -7,6 +7,25 @@ class SecretsControllerTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
     assert_match %r{/secrets/[0-9a-f-]{36}}, response.body
+    assert_nil Secret.order(:created_at).last.creator_user_id
+  end
+
+  test "create assigns creator_user when signed in" do
+    user = User.create!(email: "creator@example.com", password: "password123")
+    sign_in user
+
+    post secrets_path, params: { secret: { body: "owned secret" } }
+
+    assert_redirected_to %r{/secrets/.+/success\?token=}
+    secret = Secret.order(:created_at).last
+    assert_equal user.id, secret.creator_user_id
+  end
+
+  test "guest create still returns creator token on success" do
+    post secrets_path, params: { secret: { body: "guest" } }
+    follow_redirect!
+    assert_response :success
+    assert_match(/token=/, request.url)
   end
 
   test "success without creator token returns 404" do

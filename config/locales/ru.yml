@@ -6,6 +6,10 @@ ru:
       slogan: "Секрет который живёт мгновение"
       nav:
         create: "Создать секрет"
+        sign_in: "Войти"
+        sign_up: "Регистрация"
+        sign_out: "Выйти"
+        account_menu: "Меню аккаунта"
       footer:
         privacy: "Конфиденциальность"
         terms: "Условия"

@@ -4,6 +4,8 @@ class Secret < ApplicationRecord
 
   encrypts :encrypted_body
 
+  belongs_to :creator_user, class_name: "User", optional: true
+
   has_secure_password validations: false
 
   self.primary_key = :id

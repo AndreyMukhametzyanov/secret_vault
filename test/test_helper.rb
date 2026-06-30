@@ -9,3 +9,7 @@ class ActiveSupport::TestCase
     SecretVault::RedisClient.flushdb
   end
 end
+
+class ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+end

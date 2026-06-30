@@ -5,7 +5,6 @@ ruby "3.3.4"
 gem "rails", "~> 8.0.0"
 gem "puma", ">= 6.0"
 gem "importmap-rails"
-gem "turbo-rails"
 gem "stimulus-rails"
 gem "mysql2", "~> 0.5"
 gem "propshaft"
@@ -28,3 +27,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "devise", "~> 5.0"

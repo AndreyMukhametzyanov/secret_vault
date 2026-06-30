@@ -17,7 +17,8 @@ class SecretsController < ApplicationController
     @secret = Secret.new(
       encrypted_body: secret_params[:body],
       expires_at: PlanLimits.resolve_expires_at(secret_params[:expires_in]),
-      max_reads: PlanLimits.resolve_max_reads(secret_params[:max_reads])
+      max_reads: PlanLimits.resolve_max_reads(secret_params[:max_reads]),
+      creator_user: current_user
     )
     @secret.password = secret_params[:passphrase] if secret_params[:passphrase].present?
 

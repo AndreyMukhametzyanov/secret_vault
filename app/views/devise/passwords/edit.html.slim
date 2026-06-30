@@ -1,0 +1,23 @@
+.container.py-5
+  .row.justify-content-center
+    .col-md-6.col-lg-5
+      .card.shadow-sm.border-0
+        .card-body.p-4.p-md-5
+          h1.h3.fw-bold.mb-4 = t("devise.passwords.edit.title", default: "Новый пароль")
+          = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "vstack gap-3" }) do |f|
+            = render "devise/shared/error_messages", resource: resource
+            = f.hidden_field :reset_password_token
+            div
+              = f.label :password, t("devise.passwords.edit.password_label", default: "Новый пароль"), class: "form-label small fw-semibold text-secondary"
+              - if @minimum_password_length
+                span.text-muted.small
+                  | (
+                  = t("devise.shared.minimum_password_length", count: @minimum_password_length)
+                  | )
+              = f.password_field :password, autofocus: true, autocomplete: "new-password", class: "form-control", required: true
+            div
+              = f.label :password_confirmation, t("devise.passwords.edit.password_confirmation_label", default: "Подтверждение"), class: "form-label small fw-semibold text-secondary"
+              = f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", required: true
+            = f.submit t("devise.passwords.edit.submit", default: "Изменить пароль"), class: "btn btn-primary w-100"
+          .mt-4.pt-3.border-top.small
+            = render "devise/shared/links"
