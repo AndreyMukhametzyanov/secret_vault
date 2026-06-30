@@ -18,6 +18,10 @@ module PagesHelper
     Array(t("pages.#{action_name}.checklist"))
   end
 
+  def home_faq_items
+    Array(t("pages.home.faq.items"))
+  end
+
   def legal_prose_html(html)
     sanitize(html, tags: LEGAL_PROSE_TAGS, attributes: LEGAL_PROSE_ATTRS)
   end

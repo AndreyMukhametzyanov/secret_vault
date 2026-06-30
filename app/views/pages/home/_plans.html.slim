@@ -1,0 +1,22 @@
+section#pricing.container.mb-5 aria-labelledby="pricing-heading"
+  .row.justify-content-center
+    .col-lg-10
+      .card.shadow-sm.border-0
+        .card-header.bg-white.border-0.pt-4.px-4
+          h2#pricing-heading.h4.fw-bold.mb-0 = t("pages.home.plans.title")
+        .card-body.p-0
+          .table-responsive
+            table.table.table-borderless.mb-0.align-middle
+              thead.text-muted.small
+                tr
+                  th.ps-4 = t("pages.home.plans.feature")
+                  th.text-center = t("pages.home.plans.free")
+                  th.text-center = t("pages.home.plans.pro")
+              tbody
+                - %w[ttl reads passphrase notify].each do |row|
+                  tr.border-top
+                    td.ps-4.fw-medium = t("pages.home.plans.rows.#{row}.label")
+                    td.text-center.text-muted.small = t("pages.home.plans.rows.#{row}.free")
+                    td.text-center.text-primary.small.fw-semibold = t("pages.home.plans.rows.#{row}.pro")
+        .card-footer.bg-light.border-0.px-4.py-3.text-center.small.text-muted
+          = t("pages.home.plans.pro_note")

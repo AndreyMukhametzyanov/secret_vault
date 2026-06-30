@@ -1,0 +1,16 @@
+section#security-faq.container.mb-5 aria-labelledby="security-faq-heading"
+  .row.justify-content-center
+    .col-lg-8
+      h2#security-faq-heading.h4.fw-bold.text-center = t("pages.home.faq.title")
+      p.text-muted.small.text-center.mb-4 = t("pages.home.faq.lead")
+      .accordion#homeFaq
+        - home_faq_items.each_with_index do |item, i|
+          - question = item[:question] || item["question"]
+          - answer = item[:answer] || item["answer"]
+          .accordion-item.border-0.shadow-sm.mb-2.rounded.overflow-hidden
+            h3.accordion-header
+              button.accordion-button.collapsed.fw-semibold[type="button" data-bs-toggle="collapse" data-bs-target="#faq#{i}" aria-expanded="false"]
+                = question
+            .accordion-collapse.collapse[id="faq#{i}" data-bs-parent="#homeFaq"]
+              .accordion-body.text-muted.small.legal-prose-block
+                = legal_prose_html(answer)

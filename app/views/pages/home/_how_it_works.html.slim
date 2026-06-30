@@ -1,0 +1,10 @@
+section#how-it-works.container.mb-5 aria-labelledby="how-it-works-heading"
+  h2#how-it-works-heading.h4.fw-bold.text-center.mb-4 = t("pages.home.steps.title")
+  .row.g-4
+    - 3.times do |i|
+      .col-md-4
+        .card.h-100.shadow-sm.border-0
+          .card-body.p-4.text-center
+            .display-6.mb-2 = t("pages.home.steps.step_#{i + 1}.icon")
+            h3.h5.fw-bold = t("pages.home.steps.step_#{i + 1}.title")
+            p.card-text.text-muted.small.mb-0 = t("pages.home.steps.step_#{i + 1}.body")
