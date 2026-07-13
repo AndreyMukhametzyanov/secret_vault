@@ -1,4 +1,5 @@
 module Billing
+  # Автоплатёж без redirect: payment_method_id из первой успешной оплаты.
   class RenewSubscription
     def self.call(subscription:, client: Yookassa::Client.new)
       new(subscription:, client:).call
@@ -34,7 +35,7 @@ module Billing
       remote = client.create_payment(idempotence_key:, body:)
       user.billing_payments.create!(
         yookassa_payment_id: remote.fetch("id"),
-        amount_cents: Billing::ProPlan::MONTHLY_AMOUNT_CENTS,
+        amount_cents: Billing::ProPlan.amount_cents,
         currency: Billing::ProPlan.currency,
         status: remote["status"].presence || "pending",
         purpose: "pro_renewal",

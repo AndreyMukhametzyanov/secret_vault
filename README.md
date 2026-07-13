@@ -11,13 +11,14 @@
 
 ### Тарифы (кратко)
 
-| | Бесплатно | Pro (в разработке) |
-|---|-----------|-------------------|
+| | Бесплатно | Pro |
+|---|-----------|-----|
 | Срок жизни ссылки | 24 часа | 1 ч — 7 дней |
 | Просмотров | 1 | до 5 |
 | Кодовое слово | — | да |
 
-Подписка Pro (в разработке): платёжный провайдер — **ЮKassa** (автоплатежи).
+**Оплата Pro:** реализована через **ЮKassa** (redirect-оплата, HTTP-уведомления, сохранение карты для автопродления). Страница `/billing`, webhook `POST /webhooks/yookassa`; в production нужны ключи магазина, HTTPS webhook и cron для `Billing::RenewProSubscriptionsJob`.
+
 Главная страница (`/`) — лендинг с блоками «как работает», сравнением тарифов и FAQ по безопасности; CTA ведёт на создание секрета без регистрации.
 
 ### Публичные legal-страницы
@@ -48,6 +49,7 @@
 *   **Защита от конкурентных запросов:** Метод удаления данных использует транзакционную блокировку строки (`with_lock`), поэтому секрет гарантированно откроется только один раз, даже если ссылку попробуют открыть одновременно.
 *   **Надежная архитектура страниц:** Логика создания ссылок работает по паттерну Post/Redirect/Get. Перезагрузка страницы (F5) на экране готовой ссылки не отправляет форму заново и не создает дубликаты в базе.
 *   **Легковесный фронтенд:** Интерфейс построен на **Bootstrap 5** и шаблонизаторе **Slim**. Работа с JavaScript (кнопка копирования ссылки в буфер обмена) реализована через встроенный инструмент **Stimulus JS** без использования Node.js и папки `node_modules`.
+*   **Подписка Pro:** интеграция с **ЮKassa** (`Yookassa::Client`, `Billing::Checkout`, обработка webhook, автопродление).
 
 ---
 
@@ -98,36 +100,30 @@ export ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY="СТРОКА_2"
 export ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT="СТРОКА_3"
 ```
 
-Опционально Redis (если не дефолтный хост/БД):
-
-```bash
-export REDIS_URL="redis://127.0.0.1:6379/0"
-```
-
-Сброс лимитов в dev (очищает текущую Redis DB, не трогая MariaDB):
-
-```bash
-bin/rails runner 'SecretVault::RedisClient.flushdb'
-```
-
 В development и test при отсутствии ENV/credentials используются локальные ключи из [`config/initializers/active_record_encryption.rb`](config/initializers/active_record_encryption.rb) — для production задайте свои значения обязательно.
 
-```bash
-export YOOKASSA_SHOP_ID="..."
-export YOOKASSA_SECRET_KEY="..."
-# опционально; иначе строится из action_mailer.default_url_options
-export YOOKASSA_RETURN_URL="https://your-host/billing/return"
-```
+### Переменные окружения
 
-Либо в `bin/rails credentials:edit`:
+Скопируйте [`.env.example`](.env.example) в `.env` (файл в `.gitignore`) или задайте переменные на сервере. Альтернатива для секретов: `bin/rails credentials:edit` (`yookassa`, `active_record_encryption`).
 
-```yaml
-yookassa:
-  shop_id: ...
-  secret_key: ...
-```
+| Переменная | Назначение |
+|------------|------------|
+| `YOOKASSA_SHOP_ID` | ID магазина ЮKassa |
+| `YOOKASSA_SECRET_KEY` | Секретный ключ API ЮKassa |
+| `YOOKASSA_RETURN_URL` | URL после оплаты (опционально; в dev обычно `http://localhost:3000/billing/return`) |
+| `PRO_MONTHLY_AMOUNT_RUB` | Цена Pro в рублях (по умолчанию `299`) |
+| `PRO_CURRENCY` | Валюта платежа (по умолчанию `RUB`) |
+| `REDIS_URL` | Redis для Rack::Attack и лимитов создания секретов (dev: `redis://127.0.0.1:6379/0`) |
+| `ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY` | Шифрование секретов в БД (production обязательно) |
+| `ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY` | то же |
+| `ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT` | то же |
+| `SECRET_VAULT_DATABASE_PASSWORD` | Пароль БД в production (`config/database.yml`) |
 
-Webhook в ЛК ЮKassa: `POST /webhooks/yookassa`.
+Сброс счётчиков лимитов в dev: `bin/rails runner 'SecretVault::RedisClient.flushdb'`
+
+Опционально (Puma / production): `PORT`, `RAILS_MAX_THREADS`, `RAILS_LOG_LEVEL`, `WEB_CONCURRENCY`.
+
+Webhook ЮKassa в production: `https://<домен>/webhooks/yookassa`. Локально для проверки webhook — `ngrok http 3000`; для входа и оплаты используйте один хост (`localhost` **или** `127.0.0.1`, не смешивать).
 
 ### 5. Запуск сервера
 Запустите веб-сервер Puma командой:

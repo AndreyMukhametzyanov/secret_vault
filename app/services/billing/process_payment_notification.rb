@@ -1,4 +1,5 @@
 module Billing
+  # Вызывается из ProcessYookassaNotificationJob после webhook ЮKassa.
   class ProcessPaymentNotification
     def self.call(event:, payment_object:, client: Yookassa::Client.new)
       new(event:, payment_object:, client:).call

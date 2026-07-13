@@ -31,7 +31,7 @@ module Billing
 
       user.billing_payments.create!(
         yookassa_payment_id: payment_id,
-        amount_cents: Billing::ProPlan::MONTHLY_AMOUNT_CENTS,
+        amount_cents: Billing::ProPlan.amount_cents,
         currency: Billing::ProPlan.currency,
         status: remote["status"].presence || "pending",
         purpose: purpose,

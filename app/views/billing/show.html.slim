@@ -30,9 +30,9 @@
                 fieldset.border-0.p-0 aria-labelledby="billing-consents-legend"
                   legend#billing-consents-legend.form-label.small.fw-semibold.text-secondary.mb-2 = t("legal.billing_fieldset")
                   = render "shared/consent_checkbox", id: "agree_pro_terms", required: true, label_html: t("legal.agree_pro_terms_html")
-                  = render "shared/consent_checkbox", id: "agree_auto_renew", required: true, label_html: t("legal.agree_auto_renew_html", price: Billing::ProPlan::MONTHLY_AMOUNT_CENTS / 100)
+                  = render "shared/consent_checkbox", id: "agree_auto_renew", required: true, label_html: t("legal.agree_auto_renew_html", price: Billing::ProPlan.monthly_amount_rub)
                   = render "shared/consent_checkbox", id: "agree_payment_partner", required: true, label_html: t("legal.agree_payment_partner_html")
-                = submit_tag t("billing.show.checkout", price: Billing::ProPlan::MONTHLY_AMOUNT_CENTS / 100), class: "btn btn-primary w-100"
+                = submit_tag t("billing.show.checkout", price: Billing::ProPlan.monthly_amount_rub), class: "btn btn-primary w-100"
             - else
               .alert.alert-warning.border-0.small.mb-0 = t("billing.not_configured")
 

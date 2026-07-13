@@ -1,4 +1,7 @@
 module Billing
+  # Запускать по cron в production (например раз в час).
+  # Находит подписки с auto_renew и инициирует списание через RenewSubscription;
+  # продление периода — снова webhook payment.succeeded.
   class RenewProSubscriptionsJob < ApplicationJob
     queue_as :default
 

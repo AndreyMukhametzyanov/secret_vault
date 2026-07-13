@@ -6,11 +6,13 @@ class Subscription < ApplicationRecord
   validates :status, inclusion: { in: STATUSES }
 
   scope :renewable, lambda {
+    # Cron: RenewProSubscriptionsJob — списание за ~сутки до конца периода
     where(status: "active", auto_renew: true)
       .where.not(yookassa_payment_method_id: nil)
       .where(current_period_ends_at: ..1.day.from_now)
   }
 
+  # Pro для лимитов и UI: только дата окончания оплаченного периода (не поле status).
   def pro_entitled?
     current_period_ends_at.present? && current_period_ends_at.future?
   end

@@ -1,3 +1,6 @@
+require "net/http"
+require "uri"
+
 module Yookassa
   class Client
     API_BASE = "https://api.yookassa.ru/v3".freeze

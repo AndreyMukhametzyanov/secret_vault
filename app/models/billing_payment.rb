@@ -2,6 +2,8 @@ class BillingPayment < ApplicationRecord
   STATUSES = %w[pending waiting_for_capture succeeded canceled].freeze
   PURPOSES = %w[pro_initial pro_renewal].freeze
 
+  attribute :metadata, :json
+
   belongs_to :user
 
   validates :yookassa_payment_id, presence: true, uniqueness: true

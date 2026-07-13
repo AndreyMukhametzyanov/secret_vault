@@ -7,7 +7,7 @@ class Webhooks::YookassaControllerTest < ActionDispatch::IntegrationTest
     @user = User.create!(email: "hook@example.com", password: "password123")
     @user.billing_payments.create!(
       yookassa_payment_id: "hook-pay-1",
-      amount_cents: Billing::ProPlan::MONTHLY_AMOUNT_CENTS,
+      amount_cents: Billing::ProPlan.amount_cents,
       currency: "RUB",
       status: "pending",
       purpose: "pro_initial"
