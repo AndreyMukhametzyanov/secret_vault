@@ -1,0 +1,11 @@
+.git
+.github
+tmp
+log
+storage
+.env
+.env.*
+!.env.example
+node_modules
+coverage
+.cursor

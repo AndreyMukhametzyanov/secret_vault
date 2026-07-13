@@ -32,10 +32,10 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
   test "legal pages include key contact and cross-links in body" do
     get privacy_url
-    assert_match "privacy@secretvault.ru", response.body
+    assert_match "privacy@example.com", response.body
 
     get terms_url
-    assert_match "support@secretvault.ru", response.body
+    assert_match "support@example.com", response.body
     assert_match "/privacy", response.body
 
     get security_url
@@ -55,5 +55,44 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     sign_in user
     get root_url
     assert_select "#pricing a[href=?]", billing_path, text: I18n.t("pages.home.plans.pro_cta")
+  end
+
+  test "on_prem marketing page is public on saas" do
+    get on_prem_url
+    assert_response :success
+    assert_select "h1", text: I18n.t("pages.on_prem.title")
+    assert_match SecretVault::Deployment.sales_contact_email, response.body
+  end
+
+  test "on_prem page redirects when already on_prem deployment" do
+    with_deployment_mode("on_prem") do
+      get on_prem_url
+      assert_redirected_to root_path
+    end
+  end
+
+  test "footer links to on_prem on saas" do
+    get root_url
+    assert_select "a[href=?]", on_prem_path, text: I18n.t("layouts.application.footer.on_prem")
+  end
+
+  test "home hides pricing on on_prem deployment" do
+    with_deployment_mode("on_prem") do
+      get root_url
+      assert_response :success
+      assert_select "#pricing", count: 0
+      assert_match I18n.t("pages.home.lead_on_prem"), response.body
+      assert_no_match I18n.t("pages.home.lead"), response.body
+    end
+  end
+
+  test "saas navbar ignores stored on-prem branding" do
+    SiteSetting.current.update!(company_name: "ACME Corp")
+
+    with_deployment_mode("saas") do
+      get root_url
+      assert_response :success
+      assert_no_match "ACME Corp", response.body
+    end
   end
 end

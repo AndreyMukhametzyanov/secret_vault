@@ -1,7 +1,7 @@
 module Webhooks
-  # ЮKassa → perform_later ProcessYookassaNotificationJob (Pro включается там, не на billing/return).
   class YookassaController < ApplicationController
     skip_before_action :verify_authenticity_token
+    before_action :ensure_saas_billing!
 
     def create
       unless Yookassa::WebhookIp.allowed?(request.remote_ip)
@@ -22,6 +22,12 @@ module Webhooks
       head :ok
     rescue JSON::ParserError
       head :bad_request
+    end
+
+    private
+
+    def ensure_saas_billing!
+      head :not_found unless SecretVault::Deployment.billing_enabled?
     end
   end
 end

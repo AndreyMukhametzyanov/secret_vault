@@ -7,10 +7,16 @@ class User < ApplicationRecord
   has_many :billing_payments, dependent: :destroy
 
   def pro?
+    return true if SecretVault::Deployment.licensed_pro?
+
     subscription&.pro_entitled?
   end
 
   validate :mask_duplicate_email_on_signup, on: :create
+
+  def can_manage_branding?
+    SecretVault::Deployment.on_prem? && admin?
+  end
 
   private
 

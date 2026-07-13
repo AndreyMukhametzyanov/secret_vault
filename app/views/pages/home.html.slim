@@ -2,6 +2,7 @@
 
 = render "pages/home/hero"
 = render "pages/home/how_it_works"
-= render "pages/home/plans"
+- unless on_prem_deployment?
+  = render "pages/home/plans"
 = render "pages/home/faq"
 = render "pages/home/cta"

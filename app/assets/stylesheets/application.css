@@ -1,3 +1,13 @@
+.brand-logo {
+  max-height: 2rem;
+  width: auto;
+}
+
+.brand-logo-preview {
+  max-height: 4rem;
+  width: auto;
+}
+
 .pages-prose h2:first-child {
   margin-top: 0 !important;
 }

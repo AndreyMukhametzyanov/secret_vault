@@ -4,7 +4,7 @@ section#landing-hero.landing-hero.py-5.mb-4
       .col-lg-8
         p.text-primary.fw-semibold.mb-2 = t("layouts.application.slogan")
         h1.display-5.fw-bold.text-dark.mb-3 = t("pages.home.title")
-        p.lead.text-muted.mb-4 = t("pages.home.lead")
+        p.lead.text-muted.mb-4 = on_prem_deployment? ? t("pages.home.lead_on_prem") : t("pages.home.lead")
         .d-flex.flex-column.flex-sm-row.gap-2.justify-content-center
           = link_to t("pages.home.cta_primary"), new_secret_path, class: "btn btn-primary btn-lg px-4 fw-medium"
           = link_to t("pages.home.cta_security"), security_path, class: "btn btn-outline-secondary btn-lg px-4 fw-medium"

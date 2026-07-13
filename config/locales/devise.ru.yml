@@ -34,6 +34,7 @@ ru:
         cancel_modal_cancel: "Отмена"
         pro_section_title: "Подписка Pro"
         pro_section_lead: "Платный тариф снимает ограничения бесплатного плана при создании секретов."
+        on_prem_pro_lead: "В корпоративной установке Pro включён по лицензии — отдельная оплата не требуется."
         pro_status_active: "Pro активен"
         pro_status_free: "Бесплатный тариф"
         pro_manage: "Управление подпиской"

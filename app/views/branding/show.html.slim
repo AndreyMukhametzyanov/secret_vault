@@ -1,0 +1,27 @@
+.container.py-5
+  .row.justify-content-center
+    .col-lg-8
+      .card.shadow-sm.border-0
+        .card-body.p-4.p-md-5
+          h1.h3.fw-bold.mb-2 = t("branding.title")
+          p.text-muted.small.mb-4 = t("branding.lead")
+
+          = form_with model: @site_setting, url: branding_path, method: :patch, class: "vstack gap-4", html: { multipart: true } do |f|
+            .mb-0
+              = f.label :company_name, t("branding.company_name"), class: "form-label small fw-semibold"
+              = f.text_field :company_name, class: "form-control", placeholder: t("branding.company_name_placeholder")
+              .form-text.small = t("branding.company_name_hint")
+
+            .mb-0
+              = f.label :logo, t("branding.logo"), class: "form-label small fw-semibold"
+              - if @site_setting.logo.attached?
+                .mb-2
+                  = image_tag @site_setting.logo, class: "brand-logo-preview rounded border", alt: ""
+                .form-check.mb-2
+                  = f.check_box :remove_logo, class: "form-check-input"
+                  = f.label :remove_logo, t("branding.remove_logo"), class: "form-check-label small"
+              = f.file_field :logo, class: "form-control", accept: "image/png,image/jpeg,image/webp,image/svg+xml"
+              .form-text.small = t("branding.logo_hint")
+              = render "shared/field_errors", object: @site_setting, attribute: :logo
+
+            = f.submit t("branding.save"), class: "btn btn-primary"

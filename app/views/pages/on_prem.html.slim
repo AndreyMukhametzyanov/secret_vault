@@ -1,0 +1,24 @@
+.container.py-5
+  .row.justify-content-center
+    .col-lg-9
+      .card.shadow-sm.border-0
+        .card-body.p-4.p-md-5
+          h1.h3.fw-bold.mb-2 = t("pages.on_prem.title")
+          p.lead.text-muted = t("pages.on_prem.lead")
+
+          ul.list-unstyled.vstack.gap-3.mb-4
+            - %w[data control brand support].each do |item|
+              li.d-flex.gap-3
+                span.text-primary.fw-bold ✓
+                div
+                  strong.d-block = t("pages.on_prem.benefits.#{item}.title")
+                  span.text-muted.small = t("pages.on_prem.benefits.#{item}.body")
+
+          .bg-light.rounded-3.p-4
+            h2.h6.fw-semibold = t("pages.on_prem.contact_title")
+            p.small.text-muted.mb-3 = t("pages.on_prem.contact_lead")
+            = mail_to @contact_email, @contact_email, class: "btn btn-primary"
+            p.small.text-muted.mt-3.mb-0 = t("pages.on_prem.identity_note")
+
+          .mt-4
+            = link_to t("pages.shared.back_home"), root_path, class: "btn btn-outline-secondary"

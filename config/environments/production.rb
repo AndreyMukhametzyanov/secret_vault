@@ -8,8 +8,13 @@ Rails.application.configure do
   config.cache_store = :memory_store
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
   config.active_storage.service = :local
-  config.assume_ssl = true
-  config.force_ssl = true
+  if ENV["SECRET_VAULT_FORCE_SSL"] == "false"
+    config.assume_ssl = false
+    config.force_ssl = false
+  else
+    config.assume_ssl = true
+    config.force_ssl = true
+  end
   config.log_tags = [ :request_id ]
   config.logger = ActiveSupport::TaggedLogging.logger(STDOUT)
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")

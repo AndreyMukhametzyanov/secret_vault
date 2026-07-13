@@ -1,5 +1,6 @@
 class BillingController < ApplicationController
   before_action :authenticate_user!
+  before_action :ensure_saas_billing!
 
   def show
     @subscription = current_user.subscription
@@ -48,6 +49,12 @@ class BillingController < ApplicationController
   end
 
   private
+
+  def ensure_saas_billing!
+    return if SecretVault::Deployment.billing_enabled?
+
+    redirect_to root_path, alert: t("billing.not_available_on_prem")
+  end
 
   def billing_consents_given?
     %i[agree_pro_terms agree_auto_renew agree_payment_partner].all? do |key|

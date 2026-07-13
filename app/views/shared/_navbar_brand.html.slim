@@ -1,0 +1,8 @@
+= link_to root_path, class: "navbar-brand d-flex align-items-center gap-2 text-decoration-none"
+  - if on_prem_deployment? && site_setting.logo.attached?
+    = image_tag site_setting.logo, class: "brand-logo rounded", alt: ""
+  span.text-primary.fs-5 🔒
+  .d-flex.flex-column.lh-sm
+    span.fw-bold.text-white = t("layouts.application.brand")
+    - if on_prem_deployment? && site_setting.company_name.present?
+      span.text-white-50.small = site_setting.company_name

@@ -118,6 +118,9 @@ export ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT="СТРОКА_3"
 | `ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY` | то же |
 | `ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT` | то же |
 | `SECRET_VAULT_DATABASE_PASSWORD` | Пароль БД в production (`config/database.yml`) |
+| `ON_PREM_SALES_EMAIL` | Только SaaS: контакт на странице «Коробочная версия» (по умолчанию `sales@example.com`) |
+
+Коробка: [docs/on-prem.md](docs/on-prem.md), `docker compose up`.
 
 Сброс счётчиков лимитов в dev: `bin/rails runner 'SecretVault::RedisClient.flushdb'`
 

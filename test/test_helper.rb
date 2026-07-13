@@ -16,6 +16,22 @@ class ActiveSupport::TestCase
   ensure
     klass.define_singleton_method(method, original)
   end
+
+  def with_deployment_mode(mode)
+    previous = ENV["DEPLOYMENT_MODE"]
+    if mode.nil?
+      ENV.delete("DEPLOYMENT_MODE")
+    else
+      ENV["DEPLOYMENT_MODE"] = mode
+    end
+    yield
+  ensure
+    if previous.nil?
+      ENV.delete("DEPLOYMENT_MODE")
+    else
+      ENV["DEPLOYMENT_MODE"] = previous
+    end
+  end
 end
 
 class ActionDispatch::IntegrationTest

@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   get "/privacy", to: "pages#privacy", as: :privacy
   get "/terms", to: "pages#terms", as: :terms
   get "/security", to: "pages#security", as: :security
+  get "/on-prem", to: "pages#on_prem", as: :on_prem
+
+  resource :branding, only: %i[show update], controller: "branding"
 
   get "/billing", to: "billing#show", as: :billing
   post "/billing/checkout", to: "billing#checkout", as: :billing_checkout

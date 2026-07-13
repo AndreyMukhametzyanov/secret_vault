@@ -43,7 +43,12 @@
             p.text-muted.small.mb-3 = t("devise.registrations.edit.pro_section_lead")
             .bg-light.rounded-3.p-3.mb-3
               = render "shared/pro_benefits_list"
-            = link_to(current_user.pro? ? t("devise.registrations.edit.pro_manage") : t("devise.registrations.edit.pro_get"), billing_path, class: "btn btn-primary w-100")
+            - if on_prem_deployment?
+              p.small.text-muted.mb-3 = t("devise.registrations.edit.on_prem_pro_lead")
+              - if current_user.can_manage_branding?
+                = link_to t("layouts.application.nav.branding"), branding_path, class: "btn btn-outline-primary w-100"
+            - else
+              = link_to(current_user.pro? ? t("devise.registrations.edit.pro_manage") : t("devise.registrations.edit.pro_get"), billing_path, class: "btn btn-primary w-100")
 
           .mt-4.pt-4.border-top data-controller="confirm-modal"
             h2.h6.fw-bold.mb-2 = t("devise.registrations.edit.cancel_title")

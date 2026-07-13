@@ -11,9 +11,7 @@ html lang=I18n.locale
   body.bg-light.d-flex.flex-column.min-vh-100
     nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.shadow-sm
       .container
-        = link_to root_path, class: "navbar-brand fw-bold" do
-          span.text-primary 🔒
-          = " #{t('layouts.application.brand')}"
+        = render "shared/navbar_brand"
         .navbar-nav.ms-auto.flex-row.align-items-center.gap-2
           - if user_signed_in?
             .nav-item.dropdown
@@ -22,8 +20,12 @@ html lang=I18n.locale
               ul.dropdown-menu.dropdown-menu-end.shadow.border-0
                 li
                   h6.dropdown-header.text-truncate.mb-0 = current_user.email
-                li
-                  = link_to t("layouts.application.nav.billing"), billing_path, class: "dropdown-item small"
+                - if saas_billing?
+                  li
+                    = link_to t("layouts.application.nav.billing"), billing_path, class: "dropdown-item small"
+                - if current_user.can_manage_branding?
+                  li
+                    = link_to t("layouts.application.nav.branding"), branding_path, class: "dropdown-item small"
                 li
                   = link_to t("billing.show.account_settings"), edit_user_registration_path, class: "dropdown-item small"
                 li
@@ -56,4 +58,6 @@ html lang=I18n.locale
               = link_to t("layouts.application.footer.privacy"), privacy_path, class: "text-muted small text-decoration-none"
               = link_to t("layouts.application.footer.terms"), terms_path, class: "text-muted small text-decoration-none"
               = link_to t("layouts.application.footer.security"), security_path, class: "text-muted small text-decoration-none"
+              - if saas_billing?
+                = link_to t("layouts.application.footer.on_prem"), on_prem_path, class: "text-muted small text-decoration-none"
     script[src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"]

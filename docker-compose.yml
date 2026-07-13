@@ -1,0 +1,54 @@
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: secret_vault
+      MARIADB_DATABASE: secret_vault_production
+      MARIADB_USER: secret_vault
+      MARIADB_PASSWORD: secret_vault
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      DEPLOYMENT_MODE: on_prem
+      ON_PREM_LICENSED_PRO: "true"
+      RAILS_ENV: production
+      SECRET_VAULT_FORCE_SSL: "false"
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:?set SECRET_KEY_BASE in .env}
+      SECRET_VAULT_DATABASE_PASSWORD: secret_vault
+      DATABASE_URL: mysql2://secret_vault:secret_vault@db:3306/secret_vault_production
+      REDIS_URL: redis://redis:6379/0
+      ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: ${ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY:?set encryption keys in .env}
+      ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: ${ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY:?}
+      ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: ${ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT:?}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      bash -c "bin/rails db:prepare &&
+      bin/rails server -b 0.0.0.0"
+
+volumes:
+  db_data:
