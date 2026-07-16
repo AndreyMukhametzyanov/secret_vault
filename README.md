@@ -120,11 +120,9 @@ export ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT="СТРОКА_3"
 | `SECRET_VAULT_DATABASE_PASSWORD` | Пароль БД в production (`config/database.yml`) |
 | `ON_PREM_SALES_EMAIL` | Только SaaS: контакт на странице «Коробочная версия» (по умолчанию `sales@example.com`) |
 
-Коробка: [docs/on-prem.md](docs/on-prem.md), `docker compose up`.
+Коробка: `docker compose up`.
 
 Сброс счётчиков лимитов в dev: `bin/rails runner 'SecretVault::RedisClient.flushdb'`
-
-Опционально (Puma / production): `PORT`, `RAILS_MAX_THREADS`, `RAILS_LOG_LEVEL`, `WEB_CONCURRENCY`.
 
 Webhook ЮKassa в production: `https://<домен>/webhooks/yookassa`. Локально для проверки webhook — `ngrok http 3000`; для входа и оплаты используйте один хост (`localhost` **или** `127.0.0.1`, не смешивать).
 
